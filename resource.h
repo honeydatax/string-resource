@@ -46,3 +46,26 @@ void resourceList(const char *cc){
 		}
 	}
 }
+void saveResource(const char *cc,char *files,int start,int endss){
+	int *i;
+	char *c;
+	int counts=0;
+	int countss=endss;
+	int n;
+	int count=0;
+	FILE *f1;
+	if(cc!=NULL && files!=NULL){
+		f1=fopen(files,"w");
+		if(f1!=NULL){
+			i=(int *) cc;
+			count=*(i+0);
+			if(countss>count)countss=count;
+			for(n=start;n<countss;n++){
+				c=(char *) *(i+(n+1));
+				fwrite(c,strlen(c),1,f1);
+				fprintf(f1,"|");
+			}
+			fclose(f1);
+		}
+	}
+}
