@@ -274,4 +274,140 @@ void saveXml(const char *cc,char *files,int start,int endss){
 		}
 	}
 }
+char *loadXml(char *files){
+	FILE *f1;
+	char *xml;
+	char *xml2;
+	char *buf;
+	char *ffind;
+	char *c;
+	char *cc;
+	char *ccc;
+	char *cccc;
+	int style3=0;
+	int style2=0;
+	int style=0;
+	int r=0;
+	xml=NULL;
+	if(files!=NULL){
+		f1=fopen(files,"r");
+		if(f1!=NULL){
+			xml2=newString(files);
+			xml=newPointer(xml2);
+			buf=strString(' ',bufferresource);
+			xml2=newString("");
+			style=0;
+			while(1){
+				buf[0]=0;
+				fgetstr(buf,bufferresource-10,">",f1);
+				buf[bufferresource-10]=0;
+				replaceCharString(buf,'\n',' ');
+				replaceCharString(buf,'\r',' ');
+				replaceCharString(buf,'\t',' ');
+				replaceCharString(buf,',',' ');
+				r=0;
+				c=buf;
+				ccc=buf;
+						while(r!=1){
+							cc=strstr(ccc,"<");
+							if(cc!=NULL){
+								cccc=ccc;
+								ccc=cc+1;
+								cc[0]=0;
+							}else{
+								cccc=ccc;
+								r=1;
+							}
+							
+							cc=strstr(ccc,"row");
+							if(cc!=NULL && cc-ccc<3){
+								style2=0;
+							}
+							cc=strstr(ccc,"ROW");
+							if(cc!=NULL && cc-ccc<3){
+								style2=0;
+							}
+							cc=strstr(ccc,"Row");
+							if(cc!=NULL && cc-ccc<3){
+								style2=0;
+							}
 
+							cc=strstr(ccc,"/row");
+							if(cc!=NULL && cc-ccc<3){
+								xml=addPointer(xml,xml2);
+								xml2=newString("");
+								style2=0;
+								style=0;
+							}
+							cc=strstr(ccc,"/ROW");
+							if(cc!=NULL && cc-ccc<3){
+								xml=addPointer(xml,xml2);
+								xml2=newString("");
+								style2=0;
+								style=0;
+							}
+							cc=strstr(ccc,"/Row");
+							if(cc!=NULL && cc-ccc<3){
+								xml=addPointer(xml,xml2);
+								xml2=newString("");
+								style2=0;
+								style=0;
+							}
+							
+							cc=strstr(ccc,"/DATA");
+							if(cc!=NULL && cc-ccc<3){
+								xml2=catString(xml2,cccc);
+								style2=1;
+								style=0;
+							}
+							cc=strstr(ccc,"/data");
+							if(cc!=NULL && cc-ccc<3){
+								xml2=catString(xml2,cccc);
+								style2=1;
+								style=0;
+							}
+							cc=strstr(ccc,"/Data");
+							if(cc!=NULL && cc-ccc<3){
+								xml2=catString(xml2,cccc);
+								style2=1;
+								style=0;
+							}
+							cc=strstr(ccc,"Data");
+							if(cc!=NULL && cc-ccc<3){
+								if(style==1 && style2==1)xml2=catString(xml2,",");
+								style=1;
+							}
+							cc=strstr(ccc,"DATA");
+							if(cc!=NULL && cc-ccc<3){
+								if(style==1 && style2==1)xml2=catString(xml2,",");
+								style=1;
+							}
+							cc=strstr(ccc,"data");
+							if(cc!=NULL && cc-ccc<3){
+								if(style==1 && style2==1)xml2=catString(xml2,",");
+								style=1;
+							}
+							if(style==1){
+								//xml2=catString(xml2,cccc);
+							}
+
+							cc=strstr(ccc,">");
+							if(cc!=NULL){
+								ccc=cc+1;
+								r=0;
+							}else{
+								r=1;
+							}
+
+							
+						}
+				if(feof(f1))break;
+			}
+			frees(xml2);
+			frees(buf);
+			fclose(f1);
+		}
+	}
+	
+	return xml;
+}
