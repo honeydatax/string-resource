@@ -144,3 +144,134 @@ void cvsList(const char *cc){
 		}
 	}
 }
+void data(FILE *f1){
+	char *a="						<Data ss:Type=\"String\">";
+	fprintf (f1,"%s",a);
+}
+void enddata(FILE *f1){
+	char *a="</Data>";
+	fprintf (f1,"%s\n",a);
+}
+void cell(FILE *f1){
+	char *a="					<Cell>";
+	fprintf (f1,"%s\n",a);
+}
+void endcell(FILE *f1){
+	char *a="					</Cell>";
+	fprintf (f1,"%s\n",a);
+}
+void row(FILE *f1){
+	char *a="				<Row ss:Height=\"12,8126\">";
+	fprintf (f1,"%s\n",a);
+}
+void endrow(FILE *f1){
+	char *a="				</Row>";
+	fprintf (f1,"%s\n",a);
+}
+void endtable(FILE *f1){
+	char *a="			</Table>";
+	char *b="			<x:WorksheetOptions/>";
+	fprintf (f1,"%s\n",a);
+	fprintf (f1,"%s\n",b);
+}
+void table(FILE *f1){
+	char *a="			<Table>";
+	fprintf (f1,"%s\n",a);
+
+
+}
+void worksheet(FILE *f1){
+	char *a="		<ss:Worksheet>";
+	fprintf (f1,"%s\n",a);
+}
+void endworksheet(FILE *f1){
+	char *a="		</ss:Worksheet>";
+	fprintf (f1,"%s\n",a);
+}
+
+void types(FILE *f1){
+	char *a="	<?mso-application progid=\"Excel.Sheet\"?>";
+	char *b="	<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:c=\"urn:schemas-microsoft-com:office:component:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x2=\"http://schemas.microsoft.com/office/excel/2003/xml\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
+	fprintf (f1,"%s\n",a);
+	fprintf (f1,"%s\n",b);
+
+}
+void endxml(FILE *f1){
+	char *a="	</Workbook>";
+	fprintf (f1,"%s\n",a);
+}
+void xml(FILE *f1){
+	char *a="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	fprintf (f1,"%s\n",a);
+}
+void saveXmlLine(FILE *f1,char *lines){
+	int *i;
+	char *c;
+	char *cc;
+	int counts=0;
+	int n;
+	int count=0;
+	cc=lines;
+	if(cc!=NULL){
+		i=(int *) cc;
+		count=*(i+0);
+		row(f1);
+		for(n=0;n<count;n++){
+			cell(f1);
+			data(f1);
+			c=(char *) *(i+(n+1));
+			fprintf(f1,"%s\n",c);
+			enddata(f1);
+			endcell(f1);
+		}
+		endrow(f1);
+	}
+}
+void saveXmlNode(FILE *f1,char *node){
+	int *i;
+	char *c;
+	char *l1;
+	char *s;
+	int counts=0;
+	int n;
+	int count=0;
+	if(node!=NULL){
+			s=newString(node);
+			l1=splitString(s,',');
+			saveXmlLine(f1,l1);
+			frees(l1);
+			frees(s);
+			counts++;
+
+	}
+}
+void saveXml(const char *cc,char *files,int start,int endss){
+	int *i;
+	char *c;
+	int counts=0;
+	int countss=endss;
+	int n;
+	int count=0;
+	FILE *f1;
+	if(cc!=NULL && files!=NULL){
+		f1=fopen(files,"w");
+		if(f1!=NULL){
+		xml(f1);
+		types(f1);
+		worksheet(f1);
+		table(f1);
+			i=(int *) cc;
+			count=*(i+0);
+			if(countss>count)countss=count;
+			for(n=start;n<countss;n++){
+				c=(char *) *(i+(n+1));
+				saveXmlNode(f1,c);
+			}
+			endtable(f1);
+			endworksheet(f1);
+			endxml(f1);
+			fclose(f1);
+		}
+	}
+}
+
