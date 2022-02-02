@@ -1,46 +1,48 @@
 #include "fileList.h"
 #define bufferresource 2080
-int saveResource(char *files){
+char *loadResource(char *files){
+	int i=0;
+	char *list;
 	int counts=0;
 	char *c;
 	char *cc;
-	int lens;
+	char *ccc;
 	FILE *f1;
-	FILE *f2;
+	list=NULL;
 	if(files!=NULL){
 		f1=fopen(files,"r");
 		if(f1!=NULL){
-			c=newString(files);
-			cc=newString(fileName(c));
-			frees(c);
-			c=file(cc);
-			frees(cc);
-			c=catString(c,".RC");
-			f2=fopen(c,"w");
-			frees(c);
-			if(f2!=NULL){
-				c=strString(' ',bufferresource);
-				if(c!=NULL){
-					while(1){
-						if(feof(f1))break;
-						c[0]=0;
-						fgets(c,bufferresource-10,f1);
-						c[bufferresource-10]=0;
-						cc=strstr(c,"\\0_");
-						lens=0;
-						if(cc!=NULL){
-							cc[0]=0;
-							lens=1;
-							counts++;
-						}
-						cc=c;
-						fwrite(c,strlen(c)+lens,1,f2);
-					}
-				}
-				frees(c);
+			ccc=strString(' ',bufferresource);
+			cc=newString(files);
+			list=newPointer(cc);
+			while(1){
+				if(feof(f1))break;
+				ccc[0]=0;
+				fgetstr(ccc,bufferresource-10,"|",f1);
+				ccc[bufferresource-10]=0;
+				c=newString(ccc);
+				list=addPointer(list,c);
+				counts++;
 			}
-			fclose(f1);
+			frees(ccc);
 		}
 	}
-	return counts;
+	return list;
+}
+void resourceList(const char *cc){
+	int *i;
+	char *c;
+	int counts=0;
+	int n;
+	int count=0;
+	if(cc!=NULL){
+		i=(int *) cc;
+		count=*(i+0);
+		for(n=0;n<count;n++){
+			c=(char *) *(i+(n+1));
+			printf("%d--------------------\n",counts);
+			print(c);
+			counts++;
+		}
+	}
 }
