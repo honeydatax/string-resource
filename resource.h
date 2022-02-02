@@ -121,3 +121,26 @@ char *loadList(char *files){
 	}
 	return list;
 }
+void cvsList(const char *cc){
+	int *i;
+	char *c;
+	char *l1;
+	char *s;
+	int counts=0;
+	int n;
+	int count=0;
+	if(cc!=NULL){
+		i=(int *) cc;
+		count=*(i+0);
+		for(n=0;n<count;n++){
+			c=(char *) *(i+(n+1));
+			s=newString(c);
+			l1=splitString(s,',');
+			print("-------------");
+			printList(l1);
+			frees(l1);
+			frees(s);
+			counts++;
+		}
+	}
+}
