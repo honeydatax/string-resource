@@ -92,3 +92,32 @@ void saveList(const char *cc,char *files,int start,int endss){
 		}
 	}
 }
+char *loadList(char *files){
+	int i=0;
+	char *list;
+	int counts=0;
+	char *c;
+	char *cc;
+	char *ccc;
+	FILE *f1;
+	list=NULL;
+	if(files!=NULL){
+		f1=fopen(files,"r");
+		if(f1!=NULL){
+			ccc=strString(' ',bufferresource);
+			cc=newString(files);
+			list=newPointer(cc);
+			while(1){
+				if(feof(f1))break;
+				ccc[0]=0;
+				fgetstr(ccc,bufferresource-10,"\n",f1);
+				ccc[bufferresource-10]=0;
+				c=newString(ccc);
+				list=addPointer(list,c);
+				counts++;
+			}
+			frees(ccc);
+		}
+	}
+	return list;
+}
