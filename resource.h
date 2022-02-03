@@ -674,3 +674,10 @@ void savePs(char *cc,char *files,int starts){
 void saveMeta(FILE *f1,void *c,int size){
 	fwrite(c,size,1,f1);
 }
+void fileHeads(FILE *f1,void *c,int size){
+	int i;
+	i=ftell(f1);
+	fseek(f1,0,SEEK_SET);
+	fwrite(c,size,1,f1);
+	fseek(f1,i,SEEK_SET);
+}
