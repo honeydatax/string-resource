@@ -549,4 +549,90 @@ void saveHml(const char *cc,char *files,int start,int endss){
 		}
 	}
 }
+char *loadHtml(char *files){
+	FILE *f1;
+	char *hml;
+	char *hml2;
+	char *buf;
+	char *ffind;
+	char *c;
+	char *cc;
+	char *ccc;
+	char *cccc;
+	int style3=0;
+	int style2=0;
+	int style=0;
+	int r=0;
+	hml=NULL;
+	if(files!=NULL){
+		f1=fopen(files,"r");
+		if(f1!=NULL){
+			hml=newString("");
+			buf=strString(' ',bufferresource);
+			style=0;
+			while(1){
+				buf[0]=0;
+				fgetstr(buf,bufferresource-10,">",f1);
+				buf[bufferresource-10]=0;
+				replaceCharString(buf,'\n',' ');
+				replaceCharString(buf,'\r',' ');
+				replaceCharString(buf,'\t',' ');
+				replaceCharString(buf,',',' ');
+				r=0;
+				c=buf;
+				ccc=buf;
+					while(r!=1){
+							cc=strstr(ccc,"<");
+							if(cc!=NULL){
+								cccc=ccc;
+								ccc=cc+1;
+								cc[0]=0;
+								if(style==1)hml=catString(hml,cccc);
+							}else{
+								cccc=ccc;
+								r=1;
+							}
+							cc=strstr(ccc,"BODY");
+							if(cc!=NULL && cc-ccc<3)style=1;
+							cc=strstr(ccc,"body");
+							if(cc!=NULL && cc-ccc<3)style=1;
+							cc=strstr(ccc,"Body");
+							if(cc!=NULL && cc-ccc<3)style=1;
+							cc=strstr(ccc,"br");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"Br");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"BR");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"p");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"P");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"/p");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"/P");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"/row");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"/Row");
+							if(cc!=NULL && cc-ccc<3)hml=catString(hml,"\n");
+							cc=strstr(ccc,"/ROW");
+							cc=strstr(ccc,">");
+							if(cc!=NULL){
+								ccc=cc+1;
+								r=0;
+							}else{
+								r=1;
+							}
+						}
+
+				if(feof(f1))break;
+			}
+			frees(buf);
+			fclose(f1);
+		}
+	}
+	
+	return hml;
+}
 
