@@ -681,3 +681,14 @@ void fileHeads(FILE *f1,void *c,int size){
 	fwrite(c,size,1,f1);
 	fseek(f1,i,SEEK_SET);
 }
+void workSpace(FILE *f1,int start,int size){
+	int i;
+	char *c;
+	i=ftell(f1);
+	c=malloc(size+5);
+	fseek(f1,start,SEEK_SET);
+	fread(c,size,1,f1);
+	fseek(f1,0,SEEK_END);
+	fwrite(c,size,1,f1);
+	free(c);
+}
