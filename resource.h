@@ -411,3 +411,142 @@ char *loadXml(char *files){
 	
 	return xml;
 }
+void htmltd(FILE *f1){
+	char *a="				<td width=\"50%\" style=\"border: 1px solid #000000; padding: 0.1cm\">";
+	fprintf (f1,"%s",a);
+}
+void endhtmltd(FILE *f1){
+	char *a="</td>";
+	fprintf (f1,"%s\n",a);
+}
+void htmlrow(FILE *f1){
+	char *a="				<tr>";
+	fprintf (f1,"%s\n",a);
+}
+void endhtmlrow(FILE *f1){
+	char *a="				</tr>";
+	fprintf (f1,"%s\n",a);
+}
+
+void htmltable(FILE *f1){
+	char *a="			<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\">";
+	fprintf (f1,"%s\n",a);
+}
+void endhtmltable(FILE *f1){
+	fprintf (f1,"			</table>\n");
+}
+void htmlstyle(FILE *f1){
+	char *a="				<style type=\"text/css\">";
+	char *b="					@page { margin: 2cm }";
+	char *c="					p { margin-bottom: 0.25cm; line-height: 120% }";
+	char *d="					td p { margin-bottom: 0cm }";
+	char *e="				</style>";
+	fprintf (f1,"%s\n",a);
+	fprintf (f1,"%s\n",b);
+	fprintf (f1,"%s\n",c);
+	fprintf (f1,"%s\n",d);
+	fprintf (f1,"%s\n",e);
+}
+void htmlhead (FILE *f1){
+	fprintf (f1,"	<head>\n");
+}
+void endhtmlhead (FILE *f1){
+	fprintf (f1,"	</head>\n");
+}
+
+void htmlbody (FILE *f1){
+	fprintf (f1,"	<body>\n");
+}
+void endhtmlbody (FILE *f1){
+	fprintf (f1,"	</body>\n");
+}
+void htmltitle (FILE *f1){
+	fprintf (f1,"		<title>\n");
+}
+void endhtmltitle (FILE *f1){
+	fprintf (f1,"		</title>\n");
+}
+
+void html (FILE *f1){
+	fprintf (f1,"<html>\n");
+}
+
+ void endhtml (FILE *f1){
+	fprintf (f1,"</html>\n");
+}
+void saveHtmlLine(FILE *f1,char *lines){
+	int *i;
+	char *c;
+	char *cc;
+	int counts=0;
+	int n;
+	int count=0;
+	cc=lines;
+	if(cc!=NULL){
+		i=(int *) cc;
+		count=*(i+0);
+		row(f1);
+		for(n=0;n<count;n++){
+			htmltd(f1);
+			c=(char *) *(i+(n+1));
+			fprintf(f1,"%s\n",c);
+			endhtmltd(f1);
+
+		}
+		endrow(f1);
+	}
+}
+void saveHmlNode(FILE *f1,char *node){
+	int *i;
+	char *c;
+	char *l1;
+	char *s;
+	int counts=0;
+	int n;
+	int count=0;
+	if(node!=NULL){
+			s=newString(node);
+			l1=splitString(s,',');
+			saveHtmlLine(f1,l1);
+			frees(l1);
+			frees(s);
+			counts++;
+
+	}
+}
+void saveHml(const char *cc,char *files,int start,int endss){
+	int *i;
+	char *c;
+	int counts=0;
+	int countss=endss;
+	int n;
+	int count=0;
+	FILE *f1;
+	if(cc!=NULL && files!=NULL){
+		f1=fopen(files,"w");
+		if(f1!=NULL){
+		html(f1);
+		htmlhead(f1);
+		htmltitle(f1);
+		fprintf(f1,"%s",files);
+		endhtmltitle(f1);
+		htmlstyle(f1);
+		endhtmlhead(f1);
+		htmlbody(f1);
+		htmltable(f1);
+			i=(int *) cc;
+			count=*(i+0);
+			if(countss>count)countss=count;
+			for(n=start;n<countss;n++){
+				c=(char *) *(i+(n+1));
+				htmlrow(f1);
+				saveHmlNode(f1,c);
+				endhtmlrow(f1);
+			}
+		endhtmltable(f1);
+		endhtmlbody(f1);
+		endhtml(f1);
+		}
+	}
+}
+
