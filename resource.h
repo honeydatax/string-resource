@@ -635,4 +635,40 @@ char *loadHtml(char *files){
 	
 	return hml;
 }
+void savePs(char *cc,char *files,int starts){
+	int *i;
+	char *c;
+	int counts=0;
+	int n;
+	int count=0;
+	int ss=starts;
+	int lines=800;
+	int pages=1;
+	FILE *f1;
+	if(cc!=NULL && files!=NULL){
+		f1=fopen(files,"w");
+		if(f1!=NULL){
+			i=(int *) cc;
+			count=*(i+0);
+			fprintf (f1,"%!PS\n%%Pages: %d\n/Free-Mono findfont\n12 scalefont\nsetfont\nnewpath\n",count/50+3);
+			fprintf (f1,"\n/Free-Mono findfont\n12 scalefont\nsetfont\nnewpath\n%%%%page: 1 1\n");
+			for(n=ss;n<count;n++){
+				c=(char *) *(i+(n+1));
+				replaceCharString(c,'\n',' ');
+				replaceCharString(c,'\r',' ');
+				replaceCharString(c,'\t',' ');
+				fprintf(f1,"\n30 %d moveto\n( %s ) show\n",lines,c);
+				lines=lines-15;
+				if (lines < 32){
+					lines=800;
+					pages++;
+					fprintf(f1,"\nshowpage\n%%%%page: %d %d\n",pages,pages);
+				} 
+				counts++;
+			}
+			fprintf(f1,"\nshowpage\n%%%%EOF\n\n");
+			fclose(f1);
+		}
+	}
+}
 
