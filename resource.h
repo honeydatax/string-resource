@@ -671,4 +671,6 @@ void savePs(char *cc,char *files,int starts){
 		}
 	}
 }
-
+void saveMeta(FILE *f1,void *c,int size){
+	fwrite(c,size,1,f1);
+}
