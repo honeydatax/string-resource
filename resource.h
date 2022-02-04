@@ -713,3 +713,16 @@ void fileHole(FILE *f1,int size){
 	frees(c);
 	fseek(f1,i,SEEK_SET);
 }
+void fileMoveStart(FILE *f1,int start){
+	int i;
+	int ii;
+	fseek(f1,start,SEEK_SET);
+	ii=ftell(f1);
+	if(ii!=start){
+		fseek(f1,0,SEEK_END);
+		ii=ftell(f1);
+		i=start-ii;
+		fileHole(f1,i);
+	}
+	fseek(f1,start,SEEK_SET);
+}
