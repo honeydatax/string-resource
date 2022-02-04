@@ -692,3 +692,24 @@ void workSpace(FILE *f1,int start,int size){
 	fwrite(c,size,1,f1);
 	free(c);
 }
+void fileHole(FILE *f1,int size){
+	int i=0;
+	char *c;
+	int n=0;
+	int tim=0;
+	int tim2=0;
+	i=ftell(f1);
+	c=malloc(bufferresource);
+	memset(c,0,bufferresource-10);
+	fseek(f1,0,SEEK_END);
+	tim=size/(bufferresource-10);
+	tim2=size-(size/(bufferresource-10));
+	for(n=0;n<tim;n++){
+		fwrite(c,(bufferresource-10),1,f1);
+	}
+	if(tim2>0){
+		fwrite(c,tim2,1,f1);
+	}
+	frees(c);
+	fseek(f1,i,SEEK_SET);
+}
