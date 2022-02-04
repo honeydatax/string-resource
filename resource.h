@@ -726,3 +726,38 @@ void fileMoveStart(FILE *f1,int start){
 	}
 	fseek(f1,start,SEEK_SET);
 }
+void fileMoveLast(FILE *f1,int start,int ends, int sizes){
+	int i;
+	int ii;
+	if(ends==-1){
+			fseek(f1,0,SEEK_END);
+			ii=ftell(f1);
+			i=ii-sizes;
+			if(i<start){
+				i=start-ii;
+				fileHole(f1,i);
+			}
+			i=ii-sizes;
+			if(i<start)i=start;
+			fseek(f1,i,SEEK_SET);
+	}else{
+		fseek(f1,0,SEEK_END);
+		ii=ftell(f1);
+		if(ii<ends){
+			if(ends<start){
+				i=start-ii;
+				fileHole(f1,i);
+			}else{
+				i=ends-ii;
+				fileHole(f1,i);
+			}
+		}
+		if(ends<start){
+			fseek(f1,start,SEEK_SET);		
+		}else{
+			i=ends-sizes;
+			if(i<start)i=start;
+			fseek(f1,start,SEEK_SET);
+		}
+	}
+}
