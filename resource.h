@@ -849,3 +849,45 @@ void listFloat(double *arrays,int max){
 	}
 
 }
+void saveInteger(char *files,int *arrays,int max,int byLine){
+	int i=0;
+	FILE *f1;
+	int count=0;
+	if(files!=NULL){
+		f1=fopen(files,"w");
+		if(f1!=NULL){ 
+			for(i=0;i<max;i++){
+				fprintf(f1,"%d",arrays[i]);
+				count++;
+				if(count>=byLine){
+					fprintf(f1,"\n",arrays[i]);
+					count=0;
+				}else{
+					fprintf(f1,",",arrays[i]);
+				}
+			}
+			fclose(f1);
+		}
+	}
+}
+void saveFloat(char *files,double *arrays,int max,int byLine){
+	int i=0;
+	FILE *f1;
+	int count=0;
+	if(files!=NULL){
+		f1=fopen(files,"w");
+		if(f1!=NULL){ 
+			for(i=0;i<max;i++){
+				fprintf(f1,"%f",arrays[i]);
+				count++;
+				if(count>=byLine){
+					fprintf(f1,"\n",arrays[i]);
+					count=0;
+				}else{
+					fprintf(f1,",",arrays[i]);
+				}
+			}
+			fclose(f1);
+		}
+	}
+}
