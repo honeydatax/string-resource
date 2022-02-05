@@ -761,3 +761,91 @@ void fileMoveLast(FILE *f1,int start,int ends, int sizes){
 		}
 	}
 }
+int loadInteger(char *files,int *arrays,int max){
+	FILE *f1;
+	int i=0;
+	int mm=0;
+	int pos=0;
+	char *c;
+	char *cc;
+	c=NULL;
+	if(files!=NULL){
+		c=malloc(bufferresource);
+		if(c!=NULL){
+			f1=fopen(files,"r");
+			if(f1!=NULL){
+				while(1){
+					c[0]=0;
+					fgets(c,bufferresource-10,f1);
+					if(c[0]!=0){
+						cc=splitString(c,',');
+						pos=countList(cc);
+						for(i=0;i<pos;i++){
+							arrays[mm]=atoi(getItem(cc,i));
+							mm++;
+						}
+						frees(cc);
+					}
+									
+					if(feof(f1) || mm>=max)break;
+				}
+				fclose(f1);
+			}
+			frees(c);
+			
+		}
+	}
+	return mm;
+}
+void listInt(int *arrays,int max){
+	int i=0;
+	for(i=0;i<max;i++){
+		printf("%d\n",arrays[i]);
+		
+	}
+
+}
+int loadFloat(char *files,double *arrays,int max){
+	FILE *f1;
+	int i=0;
+	int mm=0;
+	int pos=0;
+	char *c;
+	char *cc;
+	c=NULL;
+	if(files!=NULL){
+		c=malloc(bufferresource);
+		if(c!=NULL){
+			f1=fopen(files,"r");
+			if(f1!=NULL){
+				while(1){
+					c[0]=0;
+					fgets(c,bufferresource-10,f1);
+					if(c[0]!=0){
+						cc=splitString(c,',');
+						pos=countList(cc);
+						for(i=0;i<pos;i++){
+							arrays[mm]=atof(getItem(cc,i));
+							mm++;
+						}
+						frees(cc);
+					}
+									
+					if(feof(f1) || mm>=max)break;
+				}
+				fclose(f1);
+			}
+			frees(c);
+			
+		}
+	}
+	return mm;
+}
+void listFloat(double *arrays,int max){
+	int i=0;
+	for(i=0;i<max;i++){
+		printf("%f\n",arrays[i]);
+		
+	}
+
+}
